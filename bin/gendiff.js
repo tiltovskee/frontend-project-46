@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import parseFile from '../src/index.js';
+import genDiff from '../src/index.js';
 
 program
   .name('gendiff')
@@ -10,7 +10,6 @@ program
   .argument('<filepath2>')
   .option('-f, --format <type>', 'output format')
   .action((path1, path2) => {
-    const paths = [path1, path2];
-    paths.forEach(parseFile);
+    console.log(genDiff(path1, path2));
   });
 program.parse();
