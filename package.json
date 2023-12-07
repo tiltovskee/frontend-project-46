@@ -18,6 +18,8 @@
     "eslint-plugin-import": "^2.29.0"
   },
   "dependencies": {
-    "commander": "^11.1.0"
+    "commander": "^11.1.0",
+    "lodash": "^4.17.21",
+    "yaml": "^2.3.4"
   }
 }
