@@ -1,21 +1,23 @@
 import { test, expect } from '@jest/globals';
-import getDiff from '../src/getDiff.js';
-// import { fileURLToPath } from 'url';
-// import path from 'path';
+import genDiff from '../src/index.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { readFileSync } from 'node:fs';
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const readFile = (filename) => readFileSync(getFixturePath(filename), 'utf-8');
 
-test('getDiff flat json files', () => {
-  const obj1 = { key1: 'value1', key2: 2, key3: true };
-  const obj2 = { key1: 'value1', key2: 22, key4: false };
-  expect(getDiff(obj1, obj2)).toEqual(`{
-    key1: value1
-  - key2: 2
-  + key2: 22
-  - key3: true
-  + key4: false
-}`);
+const expectedStylish = readFile('result.txt');
+
+test('genDiff json files', () => {
+  const pathToFile1 = getFixturePath('before.json');
+  const pathToFile2 = getFixturePath('after.json');
+  expect(genDiff(pathToFile1, pathToFile2)).toEqual(expectedStylish);
 });
+
+
+
+// Не забыть протестировать, что дефолтный формат - стайлиш
