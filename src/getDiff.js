@@ -1,51 +1,28 @@
 import _ from 'lodash';
 
-const getDiff = (firstFile, secondFile) => {
-  const listOfKeys = _.union(_.keys(firstFile), _.keys(secondFile));
-  const differencies = listOfKeys.reduce((acc, key) => {
-    const newAcc = { key };
+const makeTree = (firstFile, secondFile) => {
+  const keysList = _.union(_.keys(firstFile), _.keys(secondFile));
+  const tree = keysList.map((key) => {
+    if (_.isObject(firstFile[key]) && _.isObject(secondFile[key])) {
+      return { key, status: 'nested', children: makeTree(firstFile[key], secondFile[key]) };
+    }
     if (!Object.hasOwn(firstFile, key)) {
-      newAcc.value = secondFile[key];
-      newAcc.status = 'added';
-      acc.push(newAcc);
-      return acc;
+      return { key, value: secondFile[key], status: 'added' };
     }
     if (!Object.hasOwn(secondFile, key)) {
-      newAcc.value = firstFile[key];
-      newAcc.status = 'deleted';
-      acc.push(newAcc);
-      return acc;
+      return { key, value: firstFile[key], status: 'deleted' };
     }
     if (firstFile[key] === secondFile[key]) {
-      newAcc.value = firstFile[key];
-      newAcc.status = 'unchanged';
-      acc.push(newAcc);
-      return acc;
+      return { key, value: firstFile[key], status: 'unchanged' };
     }
-    newAcc.value = secondFile[key];
-    newAcc.status = 'changed';
-    acc.push(newAcc);
-    return acc;
-  }, []);
-  const sortedDifferencies = _.sortBy(differencies, 'key');
-  const diffOut = sortedDifferencies.map((node) => {
-    switch (node.status) {
-      case 'added':
-        return `  + ${node.key}: ${node.value}`;
-      case 'deleted':
-        return `  - ${node.key}: ${node.value}`;
-      case 'unchanged':
-        return `    ${node.key}: ${node.value}`;
-      case 'changed':
-        return `  - ${node.key}: ${firstFile[node.key]}
-  + ${node.key}: ${secondFile[node.key]}`;
-      default:
-        throw new Error(`Status ${node.status} doesn't declared!`);
-    }
-  }).join('\n');
-  return `{
-${diffOut}
-}`;
+    return {
+      key,
+      valueBefore: firstFile[key],
+      valueAfter: secondFile[key],
+      status: 'changed',
+    };
+  });
+  return _.sortBy(tree, 'key');
 };
 
-export default getDiff;
+export default makeTree;
