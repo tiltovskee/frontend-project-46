@@ -2,7 +2,7 @@ import path from 'node:path';
 import { cwd } from 'node:process';
 import { readFileSync } from 'node:fs';
 import parse from './parsers.js';
-import makeTree from './treeMaker.js';
+import makeTree from './makeTree.js';
 import getFormater from './formatters/index.js';
 
 const readFile = (pathToFile) => {
@@ -13,11 +13,11 @@ const readFile = (pathToFile) => {
 };
 
 const genDiff = (filepath1, filepath2, outputFormat = 'stylish') => {
-  const firstFile = readFile(filepath1);
-  const secondFile = readFile(filepath2);
-  const tree = makeTree(firstFile, secondFile);
-  const formatDifference = getFormater(outputFormat);
-  return formatDifference(tree);
+  const firstFileContent = readFile(filepath1);
+  const secondFileContent = readFile(filepath2);
+  const tree = makeTree(firstFileContent, secondFileContent);
+  const buildDiff = getFormater(outputFormat);
+  return buildDiff(tree);
 };
 
 export default genDiff;
