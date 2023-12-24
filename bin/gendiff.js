@@ -8,8 +8,8 @@ program
   .version('1.0.0')
   .argument('<filepath1>')
   .argument('<filepath2>')
-  .option('-f, --format <type>', 'output format')
-  .action((path1, path2) => {
-    console.log(genDiff(path1, path2));
+  .option('-f, --format <type>', 'output format', 'stylish')
+  .action((path1, path2, options) => {
+    console.log(genDiff(path1, path2, options.format));
   });
 program.parse();
