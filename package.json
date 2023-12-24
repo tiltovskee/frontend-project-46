@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "JavaScript program to find differences between two files",
-  "main": "/src/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "jest"
   },
