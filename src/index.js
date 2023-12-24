@@ -2,7 +2,7 @@ import path from 'node:path';
 import { cwd } from 'node:process';
 import { readFileSync } from 'node:fs';
 import parse from './parsers.js';
-import makeTree from './makeAST.js';
+import makeTree from './treeMaker.js';
 import getFormater from './formatters/index.js';
 
 const readFile = (pathToFile) => {
