@@ -1,12 +1,12 @@
 import yaml from 'yaml';
 
-const parse = (rawData, extension) => {
+const parse = (data, extension) => {
   switch (extension) {
     case '.json':
-      return JSON.parse(rawData);
+      return JSON.parse(data);
     case '.yaml':
     case '.yml':
-      return yaml.parse(rawData);
+      return yaml.parse(data);
     default:
       throw new Error(`This utility doesn't support parsing ${extension} files!`);
   }
