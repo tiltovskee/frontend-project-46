@@ -17,11 +17,11 @@ const stringify = (value, depth) => {
     return `${value}`;
   }
   const entries = Object.entries(value);
-  const strFromObj = entries.map((pair) => `${getIndent(depth)}  ${pair[0]}: ${stringify(pair[1], depth + 1)}`);
-  return ['{', ...strFromObj, `${getIndentForBrackets(depth)}}`].join('\n');
+  const string = entries.map((pair) => `${getIndent(depth)}  ${pair[0]}: ${stringify(pair[1], depth + 1)}`);
+  return ['{', ...string, `${getIndentForBrackets(depth)}}`].join('\n');
 };
 
-const formatStylish = (tree) => {
+const toStylish = (tree) => {
   const iter = (node, depth) => {
     const data = node.map((item) => {
       const {
@@ -53,4 +53,4 @@ ${getIndent(depth)}+ ${key}: ${stringify(valueAfter, depth + 1)}`;
   return iter(tree, 1);
 };
 
-export default formatStylish;
+export default toStylish;
