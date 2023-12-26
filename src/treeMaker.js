@@ -1,25 +1,25 @@
 import _ from 'lodash';
 
-const makeTree = (firstFileData, secondFileData) => {
-  const keysList = _.union(_.keys(firstFileData), _.keys(secondFileData));
-  const tree = keysList.map((key) => {
-    if (_.isObject(firstFileData[key]) && _.isObject(secondFileData[key])) {
-      return { key, status: 'nested', children: makeTree(firstFileData[key], secondFileData[key]) };
+const makeTree = (fileData1, fileData2) => {
+  const keys = _.union(_.keys(fileData1), _.keys(fileData2));
+  const tree = keys.map((key) => {
+    if (_.isObject(fileData1[key]) && _.isObject(fileData2[key])) {
+      return { key, type: 'nested', children: makeTree(fileData1[key], fileData2[key]) };
     }
-    if (!Object.hasOwn(firstFileData, key)) {
-      return { key, value: secondFileData[key], status: 'added' };
+    if (!Object.hasOwn(fileData1, key)) {
+      return { key, value: fileData2[key], type: 'added' };
     }
-    if (!Object.hasOwn(secondFileData, key)) {
-      return { key, value: firstFileData[key], status: 'deleted' };
+    if (!Object.hasOwn(fileData2, key)) {
+      return { key, value: fileData1[key], type: 'deleted' };
     }
-    if (firstFileData[key] === secondFileData[key]) {
-      return { key, value: firstFileData[key], status: 'unchanged' };
+    if (_.isEqual(fileData1[key], fileData2[key])) {
+      return { key, value: fileData1[key], type: 'unchanged' };
     }
     return {
       key,
-      valueBefore: firstFileData[key],
-      valueAfter: secondFileData[key],
-      status: 'changed',
+      value1: fileData1[key],
+      value2: fileData2[key],
+      type: 'changed',
     };
   });
   return _.sortBy(tree, 'key');
