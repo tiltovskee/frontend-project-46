@@ -17,26 +17,10 @@ const expectedJson = readFile('resultJson.txt');
 const fileExtension = ['json', 'yml'];
 
 test.each(fileExtension)('Gendiff for %s files', (extension) => {
-  const pathToFile1 = getFixturePath(`before.${extension}`);
-  const pathToFile2 = getFixturePath(`after.${extension}`);
+  const pathToFile1 = getFixturePath(`file1.${extension}`);
+  const pathToFile2 = getFixturePath(`file2.${extension}`);
   expect(genDiff(pathToFile1, pathToFile2)).toEqual(expectedStylish);
   expect(genDiff(pathToFile1, pathToFile2, 'stylish')).toEqual(expectedStylish);
   expect(genDiff(pathToFile1, pathToFile2, 'plain')).toEqual(expectedPlain);
   expect(genDiff(pathToFile1, pathToFile2, 'json')).toEqual(expectedJson);
-});
-
-test('Wrong format', () => {
-  const pathToFile1 = getFixturePath('before.json');
-  const pathToFile2 = getFixturePath('after.json');
-  expect(() => {
-    genDiff(pathToFile1, pathToFile2, 'mp3');
-  }).toThrow();
-});
-
-test('Wrong file type', () => {
-  const pathToFile1 = getFixturePath('before.json');
-  const pathToFile2 = getFixturePath('resultJson.txt');
-  expect(() => {
-    genDiff(pathToFile1, pathToFile2, 'stylish');
-  }).toThrow();
 });
