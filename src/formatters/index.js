@@ -1,6 +1,7 @@
 import toPlain from './plain.js';
 import toStylish from './stylish.js';
-import toJson from './json.js';
+
+const toJson = (tree) => JSON.stringify(tree, null, '  ');
 
 const getFormater = (format) => {
   switch (format) {
