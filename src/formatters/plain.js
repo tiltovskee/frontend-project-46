@@ -10,27 +10,19 @@ const stringify = (value) => {
 const toPlain = (tree) => {
   const iter = (node, path) => {
     const data = node.flatMap((item) => {
-      const {
-        key,
-        status,
-        children,
-        value,
-        valueBefore,
-        valueAfter,
-      } = item;
-      switch (status) {
+      switch (item.type) {
         case 'nested':
-          return iter(children, `${path}${key}.`);
+          return iter(item.children, `${path}${item.key}.`);
         case 'added':
-          return `Property '${path}${key}' was added with value: ${stringify(value)}`;
+          return `Property '${path}${item.key}' was added with value: ${stringify(item.value)}`;
         case 'deleted':
-          return `Property '${path}${key}' was removed`;
+          return `Property '${path}${item.key}' was removed`;
         case 'unchanged':
           return [];
         case 'changed':
-          return `Property '${path}${key}' was updated. From ${stringify(valueBefore)} to ${stringify(valueAfter)}`;
+          return `Property '${path}${item.key}' was updated. From ${stringify(item.value1)} to ${stringify(item.value2)}`;
         default:
-          throw new Error(`Status ${status} not allowed!`);
+          throw new Error(`Type ${item.type} is not allowed!`);
       }
     });
     return data.join('\n');
